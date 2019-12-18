@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import db.tables.Admin_Login;
 import db.tables.District_Master;
+import db.tables.Referee_Account;
 import db.tables.Referee_Login;
 import db.tables.State_Master;
 
@@ -383,6 +384,109 @@ public class DBProcess extends DBCon{
     
     /******************************************************************/
     //5. referee_account -id,rin_no,fname,lname,category_id,district_id,emailid,phoneno,date_of_reg,status
+    /******************************************************************/
+    public int getMaxID_referee_account(){
+        int mid =0;
+        try {
+            String query="SELECT MAX(id) FROM referee_account";
+             ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                mid = rset.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getMaxID_referee_account Err>>"+e);
+        }
+        return mid;
+    }
+
+    public int insert_referee_account(Referee_Account obj){
+        int result =0;
+        try {
+            String query="INSERT INTO referee_account(id,rin_no,fname,lname,category_id,district_id,emailid,phoneno,date_of_reg,status) VALUES("+obj.id+",'"+obj.rin_no+"','"+obj.fname+"','"+obj.lname+"',"+obj.category_id+","+obj.district_id+","+obj.emailid+",'"+obj.phoneno+"','"+obj.date_of_reg+"','"+obj.status+"')";
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("insert_referee_account Err>>"+e);
+        }
+        return result;
+    }
+    public int delete_referee_account(int id){
+        int result = 0;
+        try {
+            String query="DELETE FROM referee_account WHERE id="+id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("delete_referee_account Err>>"+e);
+        }
+        return result;
+    }
+    
+    public int update_referee_account(Referee_Account obj){
+        int result =0;
+        try {
+            String query="UPDATE referee_account SET rin_no='"+obj.rin_no+"',fname='"+obj.fname+"',lname='"+obj.lname+"',category_id="+obj.category_id+",district_id="+obj.district_id+",emailid='"+obj.emailid+"',phoneno='"+obj.phoneno+"',date_of_reg='"+obj.date_of_reg+"',status='"+obj.status+"' WHERE id="+obj.id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("update_referee_account Err>>"+e);
+        }
+        return result;
+    }
+     public Referee_Account select_referee_account(int id){
+        Referee_Account obj =null;
+        try {
+            String query="SELECT id,rin_no,fname,lname,category_id,district_id,emailid,phoneno,date_of_reg,status FROM referee_account WHERE id="+id;
+            ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                //id,rin_no,fname,lname,category_id,district_id,emailid,phoneno,date_of_reg,status
+                id = rset.getInt("id");
+                String rin_no = rset.getString("rin_no");
+                String fname = rset.getString("fname");
+                String lname = rset.getString("lname");
+                int category_id = rset.getInt("category_id");
+                int district_id = rset.getInt("district_id");
+                String emailid = rset.getString("emailid");
+                String phoneno = rset.getString("phoneno");
+                String date_of_reg = rset.getString("date_of_reg");
+                String status = rset.getString("status");
+                
+                obj = new Referee_Account(id, rin_no, fname, lname, category_id, district_id, emailid, phoneno, date_of_reg, status);
+               
+            }
+        } catch (Exception e) {
+            System.out.println("select_referee_account Err>>"+e);
+        }
+        return obj;
+    }
+
+    public ArrayList<Referee_Account> selectAll_referee_account(){
+        ArrayList<Referee_Account> objList = new ArrayList<Referee_Account>();
+        try {
+            String query="SELECT id,rin_no,fname,lname,category_id,district_id,emailid,phoneno,date_of_reg,status FROM referee_account ";
+            ResultSet rset = executeQuery(query);
+            while(rset.next()){
+               Referee_Account obj;
+               int id = rset.getInt("id");
+                String rin_no = rset.getString("rin_no");
+                String fname = rset.getString("fname");
+                String lname = rset.getString("lname");
+                int category_id = rset.getInt("category_id");
+                int district_id = rset.getInt("district_id");
+                String emailid = rset.getString("emailid");
+                String phoneno = rset.getString("phoneno");
+                String date_of_reg = rset.getString("date_of_reg");
+                String status = rset.getString("status");
+                
+                obj = new Referee_Account(id, rin_no, fname, lname, category_id, district_id, emailid, phoneno, date_of_reg, status);
+                
+                objList.add(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("selectAll_referee_account Err>>"+e);
+        }
+        return objList;
+    }
+   
+    
+    /******************************************************************/
     //6. tournament_master - id,tournament_name,date_of_tournament,time_of_tournament,venue_name,addr1,addr2,addr3,pincode,status
     //7. tournament_duty - id,tournament_id,referee_id,role_id
     //8. referee_duty_log - id,tournament_id,referee_id,role_id,dt,tm,status
