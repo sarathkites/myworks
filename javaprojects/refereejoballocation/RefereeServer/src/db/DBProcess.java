@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import db.tables.Admin_Login;
 import db.tables.District_Master;
 import db.tables.Referee_Account;
+import db.tables.Referee_Duty_Log;
 import db.tables.Referee_Login;
 import db.tables.State_Master;
 import db.tables.Tournament_Duty;
@@ -686,6 +687,104 @@ public class DBProcess extends DBCon{
     /******************************************************************/
    
     //8. referee_duty_log - id,tournament_id,referee_id,role_id,dt,tm,status
+    /******************************************************************/
+    public int getMaxID_referee_duty_log(){
+        int mid =0;
+        try {
+            String query="SELECT MAX(id) FROM referee_duty_log";
+             ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                mid = rset.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getMaxID_referee_duty_log Err>>"+e);
+        }
+        return mid;
+    }
+
+    public int insert_referee_duty_log(Referee_Duty_Log obj){
+        int result =0;
+        try {
+            String query="INSERT INTO referee_duty_log(id,tournament_id,referee_id,role_id,dt,tm,status) VALUES("+obj.id+","+obj.tournament_id+","+obj.referee_id+","+obj.role_id+",'"+obj.dt+"','"+obj.tm+"','"+obj.status+"')";
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("insert_referee_duty_log Err>>"+e);
+        }
+        return result;
+    }
+    public int delete_referee_duty_log(int id){
+        int result = 0;
+        try {
+            String query="DELETE FROM referee_duty_log WHERE id="+id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("delete_referee_duty_log Err>>"+e);
+        }
+        return result;
+    }
+    
+    public int update_referee_duty_log(Referee_Duty_Log obj){
+        int result =0;
+        try {
+            String query="UPDATE referee_duty_log SET tournament_id="+obj.tournament_id+",referee_id="+obj.referee_id+",role_id="+obj.role_id+",dt='"+obj.dt+"',tm='"+obj.tm+"',status='"+obj.status+"' WHERE id="+obj.id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("update_referee_duty_log Err>>"+e);
+        }
+        return result;
+    }
+     public Referee_Duty_Log select_referee_duty_log(int id){
+        Referee_Duty_Log obj =null;
+        try {
+            String query="SELECT id,tournament_id,referee_id,role_id,dt,tm,status FROM referee_duty_log WHERE id="+id;
+            ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                //id,tournament_id,referee_id,role_id,dt,tm,status
+                 id = rset.getInt("id");
+                int tournament_id = rset.getInt("tournament_id");
+                int referee_id = rset.getInt("referee_id");
+                int role_id = rset.getInt("role_id");
+                String dt = rset.getString("dt");
+                String tm = rset.getString("tm");
+                String status = rset.getString("status");
+                
+                obj = new Referee_Duty_Log(id, tournament_id, referee_id, role_id, dt, tm, status);
+               
+            }
+        } catch (Exception e) {
+            System.out.println("select_referee_duty_log Err>>"+e);
+        }
+        return obj;
+    }
+
+    public ArrayList<Referee_Duty_Log> selectAll_referee_duty_log(){
+        ArrayList<Referee_Duty_Log> objList = new ArrayList<Referee_Duty_Log>();
+        try {
+            String query="SELECT ** FROM referee_duty_log ";
+            ResultSet rset = executeQuery(query);
+            while(rset.next()){
+               Referee_Duty_Log obj ;
+               int  id = rset.getInt("id");
+                int tournament_id = rset.getInt("tournament_id");
+                int referee_id = rset.getInt("referee_id");
+                int role_id = rset.getInt("role_id");
+                String dt = rset.getString("dt");
+                String tm = rset.getString("tm");
+                String status = rset.getString("status");
+                
+                obj = new Referee_Duty_Log(id, tournament_id, referee_id, role_id, dt, tm, status);
+               
+                objList.add(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("selectAll_referee_duty_log Err>>"+e);
+        }
+        return objList;
+    }
+   
+    
+    /******************************************************************/
+   
     //9. role_master - id,role_name,role_short_code
     //10. message_template - id,action_type,message
     //11. user_log - id,referee_id,action,dt,tm
