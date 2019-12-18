@@ -14,6 +14,7 @@ import db.tables.District_Master;
 import db.tables.Referee_Account;
 import db.tables.Referee_Login;
 import db.tables.State_Master;
+import db.tables.Tournament_Duty;
 import db.tables.Tournament_Master;
 
 /**
@@ -593,6 +594,97 @@ public class DBProcess extends DBCon{
     /******************************************************************/
    
     //7. tournament_duty - id,tournament_id,referee_id,role_id
+    /******************************************************************/
+    public int getMaxID_tournament_duty(){
+        int mid =0;
+        try {
+            String query="SELECT MAX(id) FROM tournament_duty";
+             ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                mid = rset.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getMaxID_tournament_duty Err>>"+e);
+        }
+        return mid;
+    }
+
+    public int insert_tournament_duty(Tournament_Duty obj){
+        int result =0;
+        try {
+            String query="INSERT INTO tournament_duty(id,tournament_id,referee_id,role_id) VALUES("+obj.id+","+obj.tournament_id+","+obj.referee_id+","+obj.role_id+")";
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("insert_tournament_duty Err>>"+e);
+        }
+        return result;
+    }
+    public int delete_tournament_duty(int id){
+        int result = 0;
+        try {
+            String query="DELETE FROM tournament_duty WHERE id="+id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("delete_tournament_duty Err>>"+e);
+        }
+        return result;
+    }
+    
+    public int update_tournament_duty(Tournament_Duty obj){
+        int result =0;
+        try {
+            String query="UPDATE tournament_duty SET tournament_id="+obj.tournament_id+",referee_id="+obj.referee_id+",role_id="+obj.role_id+" WHERE id="+obj.id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("update_tournament_duty Err>>"+e);
+        }
+        return result;
+    }
+     public Tournament_Duty select_tournament_duty(int id){
+        Tournament_Duty obj =null;
+        try {
+            String query="SELECT id,tournament_id,referee_id,role_id FROM tournament_duty WHERE id="+id;
+            ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                id = rset.getInt("id");
+               int tournament_id = rset.getInt("tournament_id");
+               int referee_id = rset.getInt("referee_id");
+               int role_id = rset.getInt("role_id");
+               
+               obj = new Tournament_Duty(id, tournament_id, referee_id, role_id);
+               
+            }
+        } catch (Exception e) {
+            System.out.println("select_tournament_duty Err>>"+e);
+        }
+        return obj;
+    }
+
+    public ArrayList<Tournament_Duty> selectAll_tournament_duty(){
+        ArrayList<Tournament_Duty> objList = new ArrayList<Tournament_Duty>();
+        try {
+            String query="SELECT id,tournament_id,referee_id,role_id FROM tournament_duty ";
+            ResultSet rset = executeQuery(query);
+            while(rset.next()){
+               Tournament_Duty obj;
+               int   id = rset.getInt("id");
+               int tournament_id = rset.getInt("tournament_id");
+               int referee_id = rset.getInt("referee_id");
+               int role_id = rset.getInt("role_id");
+               
+               obj = new Tournament_Duty(id, tournament_id, referee_id, role_id);
+               
+               objList.add(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("selectAll_tournament_duty Err>>"+e);
+        }
+        return objList;
+    }
+   
+    
+    /******************************************************************/
+   
     //8. referee_duty_log - id,tournament_id,referee_id,role_id,dt,tm,status
     //9. role_master - id,role_name,role_short_code
     //10. message_template - id,action_type,message
