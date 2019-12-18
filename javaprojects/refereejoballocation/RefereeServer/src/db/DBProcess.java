@@ -14,6 +14,7 @@ import db.tables.District_Master;
 import db.tables.Referee_Account;
 import db.tables.Referee_Login;
 import db.tables.State_Master;
+import db.tables.Tournament_Master;
 
 /**
  *
@@ -488,6 +489,109 @@ public class DBProcess extends DBCon{
     
     /******************************************************************/
     //6. tournament_master - id,tournament_name,date_of_tournament,time_of_tournament,venue_name,addr1,addr2,addr3,pincode,status
+     /******************************************************************/
+    public int getMaxID_tournament_master(){
+        int mid =0;
+        try {
+            String query="SELECT MAX(id) FROM tournament_master";
+             ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                mid = rset.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getMaxID_tournament_master Err>>"+e);
+        }
+        return mid;
+    }
+
+    public int insert_tournament_master(Tournament_Master obj){
+        int result =0;
+        try {
+            String query="INSERT INTO tournament_master(id,tournament_name,date_of_tournament,time_of_tournament,venue_name,addr1,addr2,addr3,pincode,status) VALUES("+obj.id+",'"+obj.tournament_name+"','"+obj.date_of_tournament+"','"+obj.time_of_tournament+"','"+obj.venue_name+"','"+obj.addr1+"','"+obj.addr2+"','"+obj.addr3+"','"+obj.pincode+"','"+obj.status+"')";
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("insert_tournament_master Err>>"+e);
+        }
+        return result;
+    }
+    public int delete_tournament_master(int id){
+        int result = 0;
+        try {
+            String query="DELETE FROM tournament_master WHERE id="+id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("delete_tournament_master Err>>"+e);
+        }
+        return result;
+    }
+    
+    public int update_tournament_master(Tournament_Master obj){
+        int result =0;
+        try {
+            String query="UPDATE tournament_master SET tournament_name='"+obj.tournament_name+"',date_of_tournament='"+obj.date_of_tournament+"',time_of_tournament='"+obj.time_of_tournament+"',venue_name='"+obj.venue_name+"',addr1='"+obj.addr1+"',addr2='"+obj.addr2+"',addr3='"+obj.addr3+"',pincode='"+obj.pincode+"',status='"+obj.status+"' WHERE id="+obj.id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("update_tournament_master Err>>"+e);
+        }
+        return result;
+    }
+     public Tournament_Master select_tournament_master(int id){
+        Tournament_Master obj =null;
+        try {
+            String query="SELECT id,tournament_name,date_of_tournament,time_of_tournament,venue_name,addr1,addr2,addr3,pincode,status FROM tournament_master WHERE id="+id;
+            ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                //id,tournament_name,date_of_tournament,time_of_tournament,venue_name,addr1,addr2,addr3,pincode,status
+                id = rset.getInt("id");
+                String tournament_name = rset.getString("tournament_name");
+                String date_of_tournament = rset.getString("date_of_tournament");
+                String time_of_tournament = rset.getString("time_of_tournament");
+                String venue_name = rset.getString("venue_name");
+                String addr1 = rset.getString("addr1");
+                String addr2 = rset.getString("addr2");
+                String addr3 = rset.getString("addr3");
+                String pincode = rset.getString("pincode");
+                String status = rset.getString("status");
+                
+                obj = new Tournament_Master(id, tournament_name, date_of_tournament, time_of_tournament, venue_name, addr1, addr2, addr3, pincode, status);
+            }
+        } catch (Exception e) {
+            System.out.println("select_tournament_master Err>>"+e);
+        }
+        return obj;
+    }
+
+    public ArrayList<Tournament_Master> selectAll_tournament_master(){
+        ArrayList<Tournament_Master> objList = new ArrayList<Tournament_Master>();
+        try {
+            String query="SELECT ** FROM tournament_master ";
+            ResultSet rset = executeQuery(query);
+            while(rset.next()){
+               Tournament_Master obj;
+                int id = rset.getInt("id");
+                String tournament_name = rset.getString("tournament_name");
+                String date_of_tournament = rset.getString("date_of_tournament");
+                String time_of_tournament = rset.getString("time_of_tournament");
+                String venue_name = rset.getString("venue_name");
+                String addr1 = rset.getString("addr1");
+                String addr2 = rset.getString("addr2");
+                String addr3 = rset.getString("addr3");
+                String pincode = rset.getString("pincode");
+                String status = rset.getString("status");
+                
+                obj = new Tournament_Master(id, tournament_name, date_of_tournament, time_of_tournament, venue_name, addr1, addr2, addr3, pincode, status);
+                
+                objList.add(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("selectAll_tournament_master Err>>"+e);
+        }
+        return objList;
+    }
+   
+    
+    /******************************************************************/
+   
     //7. tournament_duty - id,tournament_id,referee_id,role_id
     //8. referee_duty_log - id,tournament_id,referee_id,role_id,dt,tm,status
     //9. role_master - id,role_name,role_short_code
