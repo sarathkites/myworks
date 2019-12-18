@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.tables.Admin_Login;
+import db.tables.District_Master;
 import db.tables.Referee_Login;
 import db.tables.State_Master;
 
@@ -291,6 +292,96 @@ public class DBProcess extends DBCon{
     /******************************************************************/
     
     //4. district_master - id,district_name,district_short_code,state_id
+    /******************************************************************/
+    public int getMaxID_district_master(){
+        int mid =0;
+        try {
+            String query="SELECT MAX(id) FROM district_master";
+             ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                mid = rset.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getMaxID_district_master Err>>"+e);
+        }
+        return mid;
+    }
+
+    public int insert_district_master(District_Master obj){
+        int result =0;
+        try {
+            String query="INSERT INTO district_master(id,district_name,district_short_code,state_id) VALUES("+obj.id+",'"+obj.district_name+"','"+obj.district_short_code+"',"+obj.state_id+")";
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("insert_district_master Err>>"+e);
+        }
+        return result;
+    }
+    public int delete_district_master(int id){
+        int result = 0;
+        try {
+            String query="DELETE FROM district_master WHERE id="+id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("delete_district_master Err>>"+e);
+        }
+        return result;
+    }
+    
+    public int update_district_master(District_Master obj){
+        int result =0;
+        try {
+            String query="UPDATE district_master SET district_name='"+obj.district_name+"',district_short_code='"+obj.district_short_code+"',state_id="+obj.state_id+" WHERE id="+obj.id;
+             result = executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println("update_district_master Err>>"+e);
+        }
+        return result;
+    }
+     public District_Master select_district_master(int id){
+        District_Master obj =null;
+        try {
+            String query="SELECT ** FROM district_master WHERE id="+id;
+            ResultSet rset = executeQuery(query);
+            if(rset.next()){
+                //id,district_name,district_short_code,state_id
+                id = rset.getInt("id");
+                String district_name = rset.getString("district_name");
+                String district_short_code = rset.getString("district_short_code");
+                int state_id = rset.getInt("state_id");
+                
+                obj = new District_Master(id, district_name, district_short_code, state_id);
+                
+            }
+        } catch (Exception e) {
+            System.out.println("select_district_master Err>>"+e);
+        }
+        return obj;
+    }
+
+    public ArrayList<District_Master> selectAll_district_master(){
+        ArrayList<District_Master> objList = new ArrayList<District_Master>();
+        try {
+            String query="SELECT ** FROM district_master ";
+            ResultSet rset = executeQuery(query);
+            while(rset.next()){
+               District_Master obj;
+               int id = rset.getInt("id");
+                String district_name = rset.getString("district_name");
+                String district_short_code = rset.getString("district_short_code");
+                int state_id = rset.getInt("state_id");
+                
+                obj = new District_Master(id, district_name, district_short_code, state_id);
+                objList.add(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("selectAll_district_master Err>>"+e);
+        }
+        return objList;
+    }
+   
+    
+    /******************************************************************/
     //5. referee_account -id,rin_no,fname,lname,category_id,district_id,emailid,phoneno,date_of_reg,status
     //6. tournament_master - id,tournament_name,date_of_tournament,time_of_tournament,venue_name,addr1,addr2,addr3,pincode,status
     //7. tournament_duty - id,tournament_id,referee_id,role_id
